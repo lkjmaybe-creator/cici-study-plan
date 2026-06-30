@@ -89,6 +89,20 @@ h2 {
   line-height: 1.7;
 }
 
+.today-date-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  margin: 18px 0 0;
+  padding: 0 16px;
+  border: 2px solid rgba(255, 143, 189, 0.22);
+  border-radius: 999px;
+  color: #684f69;
+  background: #fff2f8;
+  font-size: 15px;
+  font-weight: 800;
+}
+
 .toy-friend {
   width: 230px;
   aspect-ratio: 1;
@@ -533,6 +547,25 @@ h2 {
   box-shadow: var(--shadow);
 }
 
+.is-hidden {
+  display: none !important;
+}
+
+.parent-login-card {
+  padding: 18px;
+  border: 2px solid rgba(255, 143, 189, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(145deg, #fff, #fff7fb);
+}
+
+.parent-login-error {
+  min-height: 22px;
+  margin: 0;
+  color: #c04a76;
+  font-size: 14px;
+  font-weight: 800;
+}
+
 .reward-form {
   display: grid;
   gap: 14px;
@@ -558,14 +591,16 @@ h2 {
 }
 
 .entertainment-section,
-.cloud-section {
+.cloud-section,
+.password-section {
   margin-top: 26px;
   padding-top: 22px;
   border-top: 2px dashed rgba(197, 167, 255, 0.35);
 }
 
 .entertainment-section h3,
-.cloud-section h3 {
+.cloud-section h3,
+.password-section h3 {
   margin: 0 0 8px;
   font-size: 22px;
 }

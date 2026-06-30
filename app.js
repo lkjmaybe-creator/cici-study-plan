@@ -78,9 +78,12 @@ const aiClosers = [
 const storageKey = "cici-summer-checkin-v2";
 const legacyStorageKey = "cici-summer-checkin-v1";
 const cloudConfigKey = "cici-summer-cloud-config-v1";
+const parentPasswordKey = "cici-parent-password-v1";
+const defaultParentPassword = "cici2026";
 const cloudTableName = "cici_app_state";
 const today = getDateKey(new Date());
 
+const currentDateText = document.querySelector("#currentDateText");
 const taskList = document.querySelector("#taskList");
 const rewardList = document.querySelector("#rewardList");
 const badgeList = document.querySelector("#badgeList");
@@ -96,6 +99,14 @@ const treeMessage = document.querySelector("#treeMessage");
 const parentCenterButton = document.querySelector("#parentCenterButton");
 const parentModal = document.querySelector("#parentModal");
 const closeParentCenterButton = document.querySelector("#closeParentCenterButton");
+const parentLoginPanel = document.querySelector("#parentLoginPanel");
+const parentContent = document.querySelector("#parentContent");
+const parentLoginForm = document.querySelector("#parentLoginForm");
+const parentLoginPasswordInput = document.querySelector("#parentLoginPasswordInput");
+const parentLoginError = document.querySelector("#parentLoginError");
+const parentPasswordForm = document.querySelector("#parentPasswordForm");
+const parentPasswordInput = document.querySelector("#parentPasswordInput");
+const parentPasswordStatus = document.querySelector("#parentPasswordStatus");
 const rewardSettingsForm = document.querySelector("#rewardSettingsForm");
 const reward60Input = document.querySelector("#reward60Input");
 const reward100Input = document.querySelector("#reward100Input");
@@ -132,6 +143,18 @@ function addDays(dateKey, offset) {
   const date = new Date(year, month - 1, day);
   date.setDate(date.getDate() + offset);
   return getDateKey(date);
+}
+
+function getParentPassword() {
+  return localStorage.getItem(parentPasswordKey) || defaultParentPassword;
+}
+
+function renderCurrentDate() {
+  const now = new Date();
+  const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+  if (currentDateText) {
+    currentDateText.textContent = `今天是 ${now.getMonth() + 1}月${now.getDate()}日 星期${weekdays[now.getDay()]}`;
+  }
 }
 
 function cloneRewards(rewards) {
@@ -785,7 +808,7 @@ function startEntertainmentTicker() {
   entertainmentInterval = setInterval(renderEntertainment, 1000);
 }
 
-function openParentCenter() {
+function fillParentCenterForms() {
   const reward60 = state.rewards.find((reward) => reward.stars === 60);
   const reward100 = state.rewards.find((reward) => reward.stars === 100);
   const reward200 = state.rewards.find((reward) => reward.stars === 200);
@@ -799,6 +822,26 @@ function openParentCenter() {
   supabaseAnonKeyInput.value = cloudConfig.anonKey;
   familyCodeInput.value = cloudConfig.familyCode;
   renderEntertainment();
+}
+
+function showParentLogin(shouldFocus = true) {
+  parentLoginPanel.classList.remove("is-hidden");
+  parentContent.classList.add("is-hidden");
+  parentLoginPasswordInput.value = "";
+  parentLoginError.textContent = "";
+  if (shouldFocus) {
+    window.setTimeout(() => parentLoginPasswordInput.focus(), 50);
+  }
+}
+
+function showParentContent() {
+  fillParentCenterForms();
+  parentLoginPanel.classList.add("is-hidden");
+  parentContent.classList.remove("is-hidden");
+}
+
+function openParentCenter() {
+  showParentLogin();
   parentModal.classList.add("open");
   parentModal.setAttribute("aria-hidden", "false");
 }
@@ -806,6 +849,33 @@ function openParentCenter() {
 function closeParentCenter() {
   parentModal.classList.remove("open");
   parentModal.setAttribute("aria-hidden", "true");
+  showParentLogin(false);
+}
+
+function unlockParentCenter(event) {
+  event.preventDefault();
+
+  if (parentLoginPasswordInput.value === getParentPassword()) {
+    showParentContent();
+    return;
+  }
+
+  parentLoginError.textContent = "密码不正确，请家长再试一次。";
+  parentLoginPasswordInput.select();
+}
+
+function saveParentPassword(event) {
+  event.preventDefault();
+
+  const nextPassword = parentPasswordInput.value.trim();
+  if (nextPassword.length < 4) {
+    parentPasswordStatus.textContent = "密码至少需要 4 个字符。";
+    return;
+  }
+
+  localStorage.setItem(parentPasswordKey, nextPassword);
+  parentPasswordInput.value = "";
+  parentPasswordStatus.textContent = "新密码已保存，下次进入家长中心会生效。";
 }
 
 function saveRewardSettings(event) {
@@ -843,6 +913,7 @@ function saveCloudSettings(event) {
 }
 
 function render() {
+  renderCurrentDate();
   syncTodayCompletion();
   renderTasks();
   renderProgress();
@@ -863,6 +934,8 @@ parentModal.addEventListener("click", (event) => {
     closeParentCenter();
   }
 });
+parentLoginForm.addEventListener("submit", unlockParentCenter);
+parentPasswordForm.addEventListener("submit", saveParentPassword);
 rewardSettingsForm.addEventListener("submit", saveRewardSettings);
 cloudSettingsForm.addEventListener("submit", saveCloudSettings);
 syncNowButton.addEventListener("click", syncFromCloud);

@@ -13,6 +13,7 @@
         <p class="eyebrow">Summer Growth</p>
         <h1>CiCi 暑假成长打卡</h1>
         <p class="hero-text">每天一点点进步，星星会替你记住认真努力的样子。</p>
+        <p id="currentDateText" class="today-date-pill">今天是 --月--日 星期-</p>
       </div>
       <div class="toy-friend">
         <img src="./assets/cici-character-cutout.png" alt="CiCi 的可爱卡通学习伙伴">
@@ -106,91 +107,119 @@
         <h2 id="parentModalTitle">👨‍👩‍👧 家长中心</h2>
         <button id="closeParentCenterButton" class="close-button" type="button" aria-label="关闭家长中心">×</button>
       </div>
-      <p class="parent-help">这里可以先修改奖励文字，保存后会留在当前浏览器里。</p>
-      <form id="rewardSettingsForm" class="reward-form">
-        <label>
-          <span>60 星奖励</span>
-          <input id="reward60Input" type="text" autocomplete="off">
-        </label>
-        <label>
-          <span>100 星奖励</span>
-          <input id="reward100Input" type="text" autocomplete="off">
-        </label>
-        <label>
-          <span>200 星奖励</span>
-          <input id="reward200Input" type="text" autocomplete="off">
-        </label>
-        <button class="ai-button" type="submit">保存奖励设置</button>
-      </form>
 
-      <section class="entertainment-section" aria-label="娱乐时间管理">
-        <h3>娱乐时间管理</h3>
-        <p class="parent-help">娱乐时间只是家长控制，不会获得星星，也不会影响成长树和勋章。</p>
-
-        <form id="entertainmentSettingsForm" class="reward-form entertainment-settings">
+      <div id="parentLoginPanel" class="parent-login-card">
+        <p class="parent-help">请输入家长密码后进入设置。</p>
+        <form id="parentLoginForm" class="reward-form">
           <label>
-            <span>iPad 每天多少分钟</span>
-            <input id="ipadMinutesInput" type="number" min="1" max="240" step="1">
+            <span>家长密码</span>
+            <input id="parentLoginPasswordInput" type="password" autocomplete="current-password">
+          </label>
+          <button class="ai-button" type="submit">进入家长中心</button>
+          <p id="parentLoginError" class="parent-login-error" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div id="parentContent" class="parent-content is-hidden">
+        <p class="parent-help">这里可以先修改奖励文字，保存后会留在当前浏览器里。</p>
+        <form id="rewardSettingsForm" class="reward-form">
+          <label>
+            <span>60 星奖励</span>
+            <input id="reward60Input" type="text" autocomplete="off">
           </label>
           <label>
-            <span>电视每天多少分钟</span>
-            <input id="tvMinutesInput" type="number" min="1" max="240" step="1">
+            <span>100 星奖励</span>
+            <input id="reward100Input" type="text" autocomplete="off">
           </label>
-          <button class="ai-button" type="submit">保存娱乐时间</button>
+          <label>
+            <span>200 星奖励</span>
+            <input id="reward200Input" type="text" autocomplete="off">
+          </label>
+          <button class="ai-button" type="submit">保存奖励设置</button>
         </form>
 
-        <div class="entertainment-list">
-          <article class="entertainment-card">
-            <div>
-              <strong>📱 iPad</strong>
-              <p id="ipadStatus">每日默认 30 分钟</p>
-            </div>
-            <div id="ipadTimer" class="timer-display">30:00</div>
-            <div class="timer-actions">
-              <button type="button" data-device="ipad" data-action="start">开始</button>
-              <button type="button" data-device="ipad" data-action="pause">暂停</button>
-              <button type="button" data-device="ipad" data-action="end">结束</button>
-            </div>
-          </article>
+        <section class="entertainment-section" aria-label="娱乐时间管理">
+          <h3>娱乐时间管理</h3>
+          <p class="parent-help">娱乐时间只是家长控制，不会获得星星，也不会影响成长树和勋章。</p>
 
-          <article class="entertainment-card">
-            <div>
-              <strong>📺 电视</strong>
-              <p id="tvStatus">每日默认 40 分钟</p>
-            </div>
-            <div id="tvTimer" class="timer-display">40:00</div>
-            <div class="timer-actions">
-              <button type="button" data-device="tv" data-action="start">开始</button>
-              <button type="button" data-device="tv" data-action="pause">暂停</button>
-              <button type="button" data-device="tv" data-action="end">结束</button>
-            </div>
-          </article>
-        </div>
-      </section>
+          <form id="entertainmentSettingsForm" class="reward-form entertainment-settings">
+            <label>
+              <span>iPad 每天多少分钟</span>
+              <input id="ipadMinutesInput" type="number" min="1" max="240" step="1">
+            </label>
+            <label>
+              <span>电视每天多少分钟</span>
+              <input id="tvMinutesInput" type="number" min="1" max="240" step="1">
+            </label>
+            <button class="ai-button" type="submit">保存娱乐时间</button>
+          </form>
 
-      <section class="cloud-section" aria-label="云同步设置">
-        <h3>云同步设置</h3>
-        <p class="parent-help">部署到网上后，在每台设备填同一组 Supabase 配置和家庭同步码，就能同步打卡数据。</p>
-        <form id="cloudSettingsForm" class="reward-form cloud-form">
-          <label>
-            <span>Supabase URL</span>
-            <input id="supabaseUrlInput" type="url" placeholder="https://xxxx.supabase.co" autocomplete="off">
-          </label>
-          <label>
-            <span>Supabase anon key</span>
-            <input id="supabaseAnonKeyInput" type="password" placeholder="粘贴 anon public key" autocomplete="off">
-          </label>
-          <label>
-            <span>家庭同步码</span>
-            <input id="familyCodeInput" type="text" placeholder="例如 cici-family-2026" autocomplete="off">
-          </label>
-          <div class="cloud-actions">
-            <button class="ai-button" type="submit">保存同步设置</button>
-            <button id="syncNowButton" class="parent-button" type="button">立即同步</button>
+          <div class="entertainment-list">
+            <article class="entertainment-card">
+              <div>
+                <strong>📱 iPad</strong>
+                <p id="ipadStatus">每日默认 30 分钟</p>
+              </div>
+              <div id="ipadTimer" class="timer-display">30:00</div>
+              <div class="timer-actions">
+                <button type="button" data-device="ipad" data-action="start">开始</button>
+                <button type="button" data-device="ipad" data-action="pause">暂停</button>
+                <button type="button" data-device="ipad" data-action="end">结束</button>
+              </div>
+            </article>
+
+            <article class="entertainment-card">
+              <div>
+                <strong>📺 电视</strong>
+                <p id="tvStatus">每日默认 40 分钟</p>
+              </div>
+              <div id="tvTimer" class="timer-display">40:00</div>
+              <div class="timer-actions">
+                <button type="button" data-device="tv" data-action="start">开始</button>
+                <button type="button" data-device="tv" data-action="pause">暂停</button>
+                <button type="button" data-device="tv" data-action="end">结束</button>
+              </div>
+            </article>
           </div>
-        </form>
-        <p id="cloudStatus" class="cloud-status">未开启云同步，当前数据保存在本设备。</p>
-      </section>
+        </section>
+
+        <section class="cloud-section" aria-label="云同步设置">
+          <h3>云同步设置</h3>
+          <p class="parent-help">部署到网上后，在每台设备填同一组 Supabase 配置和家庭同步码，就能同步打卡数据。</p>
+          <form id="cloudSettingsForm" class="reward-form cloud-form">
+            <label>
+              <span>Supabase URL</span>
+              <input id="supabaseUrlInput" type="url" placeholder="https://xxxx.supabase.co" autocomplete="off">
+            </label>
+            <label>
+              <span>Supabase anon key</span>
+              <input id="supabaseAnonKeyInput" type="password" placeholder="粘贴 anon public key" autocomplete="off">
+            </label>
+            <label>
+              <span>家庭同步码</span>
+              <input id="familyCodeInput" type="text" placeholder="例如 cici-family-2026" autocomplete="off">
+            </label>
+            <div class="cloud-actions">
+              <button class="ai-button" type="submit">保存同步设置</button>
+              <button id="syncNowButton" class="parent-button" type="button">立即同步</button>
+            </div>
+          </form>
+          <p id="cloudStatus" class="cloud-status">未开启云同步，当前数据保存在本设备。</p>
+        </section>
+
+        <section class="password-section" aria-label="家长密码设置">
+          <h3>家长密码</h3>
+          <p class="parent-help">修改后，下次进入家长中心需要输入新密码。</p>
+          <form id="parentPasswordForm" class="reward-form">
+            <label>
+              <span>新密码</span>
+              <input id="parentPasswordInput" type="password" minlength="4" autocomplete="new-password">
+            </label>
+            <button class="ai-button" type="submit">保存新密码</button>
+          </form>
+          <p id="parentPasswordStatus" class="cloud-status" aria-live="polite">当前已开启家长密码保护。</p>
+        </section>
+      </div>
     </section>
   </div>
 
