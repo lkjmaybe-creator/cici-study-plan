@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CiCi 暑假成长打卡</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Summer Growth</p>
+        <h1>CiCi 暑假成长打卡</h1>
+        <p class="hero-text">每天一点点进步，星星会替你记住认真努力的样子。</p>
+      </div>
+      <div class="toy-friend">
+        <img src="./assets/cici-character-cutout.png" alt="CiCi 的可爱卡通学习伙伴">
+      </div>
+    </section>
+
+    <section class="dashboard" aria-label="今日进度">
+      <div class="progress-card">
+        <div>
+          <p class="label">今日完成</p>
+          <strong id="todayProgressText">0 / 7</strong>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <span id="todayProgressBar"></span>
+        </div>
+      </div>
+
+      <div class="star-card">
+        <p class="label">累计星星</p>
+        <strong><span id="totalStars">0</span> ★</strong>
+      </div>
+
+      <div class="streak-card">
+        <p class="label">连续打卡</p>
+        <strong>🔥 已坚持 <span id="streakDays">0</span> 天</strong>
+      </div>
+    </section>
+
+    <section class="ai-section" aria-label="CiCi 的 AI 学习伙伴">
+      <div class="ai-buddy" aria-hidden="true">
+        <span class="ai-buddy-face">🤖</span>
+      </div>
+      <div class="ai-content">
+        <p class="label">Local AI Buddy</p>
+        <h2>🤖 CiCi 的 AI 学习伙伴</h2>
+        <p id="aiMessage" class="ai-message">我正在看今天的小星星，马上给 CiCi 加油。</p>
+      </div>
+      <button id="aiEncourageButton" class="ai-button" type="button">✨ AI 鼓励我</button>
+    </section>
+
+    <section class="growth-section" aria-label="成长树和勋章">
+      <div class="growth-tree-card">
+        <div class="section-title">
+          <h2>成长树</h2>
+          <p class="growth-note">成长比奖励更重要，每天坚持一点点。🌱</p>
+        </div>
+        <div class="tree-wrap">
+          <div id="growthTree" class="growth-tree" aria-hidden="true">
+            <span class="tree-sparkle sparkle-one">✦</span>
+            <span class="tree-sparkle sparkle-two">✿</span>
+            <span class="tree-crown"></span>
+            <span class="tree-trunk"></span>
+            <span class="tree-ground"></span>
+          </div>
+          <div>
+            <p id="treeMessage" class="tree-message">完成一整天任务后，成长树会长高一点。</p>
+            <p class="tree-small">连续坚持越多，叶子会更漂亮。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge-card">
+        <h2>勋章系统</h2>
+        <div id="badgeList" class="badge-list"></div>
+      </div>
+    </section>
+
+    <section class="task-section">
+      <div class="section-title">
+        <h2>今日任务</h2>
+        <button id="resetTodayButton" type="button">重置今天</button>
+      </div>
+      <div id="taskList" class="task-list"></div>
+    </section>
+
+    <section class="reward-section">
+      <div class="section-title">
+        <div>
+          <h2>星星奖励</h2>
+          <p class="reward-note">成长比奖励更重要，每天坚持一点点。🌱</p>
+        </div>
+        <button id="parentCenterButton" class="parent-button" type="button">👨‍👩‍👧 家长中心</button>
+      </div>
+      <div id="rewardList" class="reward-list"></div>
+    </section>
+  </main>
+
+  <div id="parentModal" class="modal-backdrop" aria-hidden="true">
+    <section class="parent-modal" role="dialog" aria-modal="true" aria-labelledby="parentModalTitle">
+      <div class="section-title">
+        <h2 id="parentModalTitle">👨‍👩‍👧 家长中心</h2>
+        <button id="closeParentCenterButton" class="close-button" type="button" aria-label="关闭家长中心">×</button>
+      </div>
+      <p class="parent-help">这里可以先修改奖励文字，保存后会留在当前浏览器里。</p>
+      <form id="rewardSettingsForm" class="reward-form">
+        <label>
+          <span>60 星奖励</span>
+          <input id="reward60Input" type="text" autocomplete="off">
+        </label>
+        <label>
+          <span>100 星奖励</span>
+          <input id="reward100Input" type="text" autocomplete="off">
+        </label>
+        <label>
+          <span>200 星奖励</span>
+          <input id="reward200Input" type="text" autocomplete="off">
+        </label>
+        <button class="ai-button" type="submit">保存奖励设置</button>
+      </form>
+
+      <section class="entertainment-section" aria-label="娱乐时间管理">
+        <h3>娱乐时间管理</h3>
+        <p class="parent-help">娱乐时间只是家长控制，不会获得星星，也不会影响成长树和勋章。</p>
+
+        <form id="entertainmentSettingsForm" class="reward-form entertainment-settings">
+          <label>
+            <span>iPad 每天多少分钟</span>
+            <input id="ipadMinutesInput" type="number" min="1" max="240" step="1">
+          </label>
+          <label>
+            <span>电视每天多少分钟</span>
+            <input id="tvMinutesInput" type="number" min="1" max="240" step="1">
+          </label>
+          <button class="ai-button" type="submit">保存娱乐时间</button>
+        </form>
+
+        <div class="entertainment-list">
+          <article class="entertainment-card">
+            <div>
+              <strong>📱 iPad</strong>
+              <p id="ipadStatus">每日默认 30 分钟</p>
+            </div>
+            <div id="ipadTimer" class="timer-display">30:00</div>
+            <div class="timer-actions">
+              <button type="button" data-device="ipad" data-action="start">开始</button>
+              <button type="button" data-device="ipad" data-action="pause">暂停</button>
+              <button type="button" data-device="ipad" data-action="end">结束</button>
+            </div>
+          </article>
+
+          <article class="entertainment-card">
+            <div>
+              <strong>📺 电视</strong>
+              <p id="tvStatus">每日默认 40 分钟</p>
+            </div>
+            <div id="tvTimer" class="timer-display">40:00</div>
+            <div class="timer-actions">
+              <button type="button" data-device="tv" data-action="start">开始</button>
+              <button type="button" data-device="tv" data-action="pause">暂停</button>
+              <button type="button" data-device="tv" data-action="end">结束</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="cloud-section" aria-label="云同步设置">
+        <h3>云同步设置</h3>
+        <p class="parent-help">部署到网上后，在每台设备填同一组 Supabase 配置和家庭同步码，就能同步打卡数据。</p>
+        <form id="cloudSettingsForm" class="reward-form cloud-form">
+          <label>
+            <span>Supabase URL</span>
+            <input id="supabaseUrlInput" type="url" placeholder="https://xxxx.supabase.co" autocomplete="off">
+          </label>
+          <label>
+            <span>Supabase anon key</span>
+            <input id="supabaseAnonKeyInput" type="password" placeholder="粘贴 anon public key" autocomplete="off">
+          </label>
+          <label>
+            <span>家庭同步码</span>
+            <input id="familyCodeInput" type="text" placeholder="例如 cici-family-2026" autocomplete="off">
+          </label>
+          <div class="cloud-actions">
+            <button class="ai-button" type="submit">保存同步设置</button>
+            <button id="syncNowButton" class="parent-button" type="button">立即同步</button>
+          </div>
+        </form>
+        <p id="cloudStatus" class="cloud-status">未开启云同步，当前数据保存在本设备。</p>
+      </section>
+    </section>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
